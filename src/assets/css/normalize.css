@@ -1,0 +1,23 @@
+/* 整体样式 */
+	*{
+		margin: 0;
+		padding: 0;
+	}
+  ul,li{
+    list-style: none;
+  }
+  a{
+    text-decoration: none;
+    color: #000;
+  }
+  .clearfix:after{
+  	content: "";
+  	display: block;
+  	clear: both;
+  }
+  /* 设置背景颜色为灰色 */
+  body{
+    background-color: #e1e1e1;
+    font-size: 14px;
+    
+  }
