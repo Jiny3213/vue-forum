@@ -19,6 +19,9 @@ const store = new Vuex.Store({
     },
     setUser(state, user) {
       state.user.username = user.username
+    },
+    logout(state) {
+      state.user.username = null
     }
   },
   getters: {

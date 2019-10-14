@@ -19,7 +19,6 @@
               </div>
             </div>
             <button class="submit" @click.prevent="submit">登录</button>
-            <button class="submit" @click.prevent="test">测试</button>
           </form>
     </template>
   </basic-panel>
@@ -28,8 +27,7 @@
 
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel'
-  import Login from '@network/login'
-  
+  import {login} from '@network/login'
 	export default {
     name: 'login',
 		data() {
@@ -43,16 +41,16 @@
     },
     methods: {
       submit() {
-        var login = new Login(this.username, this.password)
-        login.start().then(user => {
+        if(!this.username || !this.password) {
+          alert('账号或密码不能为空')
+          return
+        }
+        login(this.username, this.password).then(user => {
           if(!user) return
           this.$store.commit('setUser', user)
+          this.$router.replace('/')
         })
       },
-      test() {
-        var login = new Login('a', 'b')
-        login.test()
-      }
     }
 	}
 </script>

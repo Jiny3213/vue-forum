@@ -17,8 +17,9 @@
         <li><a @click.prevent="beginner">新手入门</a></li>
         <li><a href="#">API</a></li>
         <li><a @click.prevent="about">关于</a></li>
-        <li><a @click.prevent="register">注册</a></li>
-        <li><a @click.prevent="login">登录</a></li>
+        <li><a @click.prevent="register" v-show="!$store.state.user.username">注册</a></li>
+        <li><a @click.prevent="login" v-show="!$store.state.user.username">登录</a></li>
+        <li><a @click.prevent="logout" v-show="$store.state.user.username">退出登录</a></li>
       </ul>
     </div>
 	</div>
@@ -51,6 +52,10 @@
       },
       about() {
         this.router('/about')
+      },
+      logout() {
+        localStorage.removeItem('token')
+        this.$store.commit('logout')
       },
       search() {
         alert(`搜索成功，你搜索的内容是 "${this.searchText}"\n但是很遗憾，搜索功能还没有实装QAQ`)

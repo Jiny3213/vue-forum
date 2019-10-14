@@ -87,17 +87,17 @@
     margin-bottom: 12px;
   }
   .user-avatar{
-    width: 49px;
+    width: 48px;
     border: 1px solid $bgGrey;
     margin-right: 10px;
   }
   .user-name{
     height: 50px;
+    width: 200px;
     display: inline-block;
     position: relative;
     span{
       font-size: 16px;
-      display: block;
       position: absolute;
       top: 50%;
       transform: translateY(-50%);

@@ -14,7 +14,7 @@
   import IndexHeader from '@views/indexHeader/IndexHeader.vue'
   import IndexAside from '@views/indexAside/IndexAside.vue'
   import IndexFooter from '@views/indexFooter/IndexFooter.vue'
-  import Login from '@network/login.js'
+  import {getUser} from '@network/login.js'
   
   export default {
     name: 'app',
@@ -25,8 +25,7 @@
     },
     mounted() {
       // 获取登录信息
-      var login = new Login
-      login.getUser.call(this)
+      getUser.call(this)
     }
   }
 </script>

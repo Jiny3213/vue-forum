@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {request} from '@network/request.js'
+  import {request, baseURL} from '@network/request.js'
   
   export default {
     name: 'basic-banner',
@@ -54,7 +54,7 @@
         url: '/banner'
       }).then(res => {
         this.imgs = res.data.map(path => {
-          return 'http://localhost:8888' + path
+          return baseURL + path
         })
       })
     },
