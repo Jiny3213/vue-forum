@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseURL = 'http://101.132.237.93'
+// const baseURL = 'http://101.132.237.93'
+const baseURL = 'http://localhost:8888'
 
 export {baseURL}
 export function request(config) {

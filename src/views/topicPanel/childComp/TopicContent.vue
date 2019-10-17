@@ -1,6 +1,6 @@
 <template>
   <div class="topic-content">
-    {{topicContent}}
+    <div class="text-area" v-html="topicContent"></div>
   </div>
 </template>
 
@@ -13,5 +13,6 @@
   }
 </script>
 
-<style>
+<style lang="scss" scoped>
+  @import url("~@assets/css/text.css");
 </style>

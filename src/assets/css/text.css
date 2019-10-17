@@ -1,0 +1,71 @@
+/* .text-area-container {
+  position: relative;
+}
+.text-area-container .w-e-progress {
+  position: absolute;
+  background-color: #1e88e5;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+} */
+.text-area {
+  padding: 0 10px;
+  /* overflow-y: scroll; */
+}
+.text-area p,
+.text-area h1,
+.text-area h2,
+.text-area h3,
+.text-area h4,
+.text-area h5,
+.text-area table,
+.text-area pre {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+.text-area ul,
+.text-area ol {
+  margin: 10px 0 10px 20px;
+}
+.text-area blockquote {
+  display: block;
+  border-left: 8px solid #d0e5f2;
+  padding: 5px 10px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 100%;
+  background-color: #f1f1f1;
+}
+.text-area code {
+  display: inline-block;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+  padding: 3px 5px;
+  margin: 0 3px;
+}
+.text-area pre code {
+  display: block;
+}
+.text-area table {
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+}
+.text-area table td,
+.text-area table th {
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  padding: 3px 5px;
+}
+.text-area table th {
+  border-bottom: 2px solid #ccc;
+  text-align: center;
+}
+.text-area:focus {
+  outline: none;
+}
+.text-area img {
+  cursor: pointer;
+}
+.text-area img:hover {
+  box-shadow: 0 0 5px #333;
+}

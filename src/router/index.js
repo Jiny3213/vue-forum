@@ -5,14 +5,17 @@ import Vue from 'vue'
 // 引入组件,懒加载
 const TopicsPanel = () => import('@views/topicsPanel/TopicsPanel.vue')
 const TopicPanel = () => import('@views/topicPanel/TopicPanel.vue')
-const Login = () => import('@views/login/Login.vue')
+const Login = () => import('@/views/login/Login.vue')
 const Register = () => import('@views/register/Register.vue')
-const Beginner = () => import('../components/Beginner.vue')
-const About = () => import('../components/About.vue')
+const About = () => import('@views/about/About.vue')
 const Create = () => import('@views/create/Create.vue')
+const Test = () => import('@views/test/Test.vue')
 
 // 安装插件
 Vue.use(VueRouter)
+
+// 引入vuex，检查是否登录
+import store from '../store/index.js'
 
 // 创建路由对象
 var routes = [
@@ -25,6 +28,7 @@ var routes = [
   },
   { 
     path: '/login',
+    name: 'login',
     component: Login,
     meta: {
       title: '登录社区'
@@ -38,10 +42,10 @@ var routes = [
     }
   },
   {
-    path: '/beginner',
-    component: Beginner,
+    path: '/test',
+    component: Test,
     meta: {
-      title: '新手入门'
+      title: '测试本站'
     }
   },
   {
@@ -52,7 +56,8 @@ var routes = [
     }
   },
   {
-    path: '/topic',
+    path: '/topic/:id',
+    name: 'topic',
     component: TopicPanel,
     meta: {
       title: '文章'
@@ -63,6 +68,15 @@ var routes = [
     component: Create,
     meta: {
       title: '新建文章'
+    },
+    beforeEnter: (to, from, next) => {
+      if(router.app.$store.state.user.username) {
+        next()
+      }
+      else {
+        next('/login')
+        alert('请先登录')
+      }
     }
   }
 ]

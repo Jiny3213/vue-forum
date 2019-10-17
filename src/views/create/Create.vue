@@ -24,11 +24,12 @@
       </div>
       
       <!-- 富文本编辑器 -->
-      <div ref="editor"></div>
+      <wang-editor ref="editor"></wang-editor>
       
       <!-- 提交 -->
       <button class="submit" @click="submit">提交</button>
-      
+      <!-- <button class="submit" @click="test">测试</button> -->
+      <!-- <div class="text-area" v-html="content"></div> -->
     </template>
   </basic-panel>
   
@@ -36,61 +37,46 @@
 
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel'
-  import E from 'wangeditor'
+  import WangEditor from '@components/common/WangEditor.vue'
+  import {sendTopic} from '@network/sendTopic.js'
   
   export default{
     name: 'create',
     data() {
       return {
-        editorContent: '',
-        editor: null,
         tag: null,
-        title: null
+        title: null,
+        content: null,
+        // 发送tag前转换成中文
+        tagName: {
+          share: '分享',
+          ask: '问答',
+          job: '求职',
+          test: '测试'
+        }
       }
     },
     components: {
       BasicPanel,
+      WangEditor
     },
     methods: {
-      getJson() {
-        var json = this.editor.txt.getJSON()
-        var jsonStr = JSON.stringify(json)
-        console.log(JSON.parse(JSON.stringify(this.editorContent)))
-        console.log(this.editor.txt.getJSON())
-      },
       submit() {
-        alert('提交成功')
-        this.$router.replace('/')
-      }
-    },
-    mounted() {
-      var editor = new E(this.$refs.editor)
-      // 设置菜单选项
-      editor.customConfig.menus = [
-        'head',  // 标题
-        'bold',  // 粗体
-        'fontSize',  // 字号
-        'fontName',  // 字体
-        'italic',  // 斜体
-        'underline',  // 下划线
-        'strikeThrough',  // 删除线
-        'foreColor',  // 文字颜色
-        'backColor',  // 背景颜色
-        'link',  // 插入链接
-        'list',  // 列表
-        'justify',  // 对齐方式
-        'quote',  // 引用
-        'image',  // 插入图片
-        'code',  // 插入代码
-      ]
-      editor.customConfig.onchange = (html) => {
-        this.editorContent = html
-      }
-      editor.create()
-      this.editor = editor
+        var data = {
+          tag: this.tagName[this.tag], 
+          title: this.title, 
+          content: this.$refs.editor.editorContent
+        } 
+        sendTopic.call(this, data)
+      },
+      // test() {
+      //   this.$refs.editor.test()
+      //   this.content = this.$refs.editor.editorContent
+      // }
     }
   }
 </script>
+
 
 <style lang="scss" scoped>
   .main-title{
@@ -140,4 +126,5 @@
     @include basic-button;
     margin: 10px auto 0 auto;
   }
+  // @import url("~@assets/css/text.css");
 </style>

@@ -14,8 +14,7 @@
       
       <ul class="nav">
         <li><a @click.prevent="GotoIndex">首页</a></li>
-        <li><a @click.prevent="beginner">新手入门</a></li>
-        <li><a href="#">API</a></li>
+        <li><a @click.prevent="test">测试本站</a></li>
         <li><a @click.prevent="about">关于</a></li>
         <li><a @click.prevent="register" v-show="!$store.state.user.username">注册</a></li>
         <li><a @click.prevent="login" v-show="!$store.state.user.username">登录</a></li>
@@ -39,7 +38,10 @@
         this.$router.replace(path)
       },
       login() {
-        this.router('/login')
+        if(this.$route.path == '/login') return
+        this.$router.replace({
+          name: 'login'
+        })
       },
       register() {
         this.router('/register')
@@ -47,8 +49,8 @@
       GotoIndex() {
         this.router('/')
       },
-      beginner() {
-        this.router('/beginner')
+      test() {
+        this.router('/test')
       },
       about() {
         this.router('/about')

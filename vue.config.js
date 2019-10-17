@@ -4,7 +4,8 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: './',
+  // 这里必须是/，否则动态路由引用错误
+  publicPath: '/',
   chainWebpack(config) {
     config.resolve.alias
       .set('@', resolve('src'))

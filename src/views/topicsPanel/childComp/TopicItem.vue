@@ -1,32 +1,31 @@
 <template>
   <ul class="topic">
-    <li v-for="(topic, index) in topics" :key="index" @click="clickTopic">
+    <li v-for="(topic, index) in topics" :key="index" @click="clickTopic(topic.header.id)">
       <!-- 头像 -->
-      <div :title="topic.owner">
-        <img class="owner-avatar" src="~@assets/img/avater-default.png" alt="">
+      <div :title="topic.header.author">
+        <img class="owner-avatar" src="~@assets/img/avatar-default.png" alt="">
       </div>
       <!-- 评论数、浏览量 -->
       <div class="number">
-        <span class="comments">{{topic.comments}}</span>/{{topic.browsed}}
+        <span class="comments">{{topic.comments.length}}</span>/{{topic.header.browsed}}
       </div>
       <!-- tag -->
-      <tag-box class="tag" :tagName="topic.tag"></tag-box>
-      <!-- <div class="tag">{{topic.tag}}</div> -->
+      <span class="tag-box">{{topic.header.tag}}</span>
       <!-- 标题 -->
-      <div class="title">{{topic.title}}</div>
+      <div class="title">{{topic.header.title}}</div>
       <!-- 最后评论时间 -->
-      <div class="last-comment-date">{{topic.lastCommentDate}}</div>
+      <!-- <div class="last-comment-date" v-if="topic.comments[0]">{{topic.header.author}}</div> -->
       <!-- 最后评论人头像 -->
-      <div :title="topic.lastCommenter">
-        <img class="last-commenter-avatar" src="~@assets/img/avater-default.png" alt="">
-      </div>
+      <!-- <div :title="topic.comments[comments.length-1].commenter">
+        <img class="last-commenter-avatar" src="~@assets/img/avatar-default.png" alt=""
+        v-if="topic.comments[0]">
+      </div> -->
     </li>
   </ul>
 </template>
 
 <script>
   import {request} from '@network/request.js'
-  import TagBox from '@components/common/tagBox/TagBox'
   
   export default {
     name: 'topic-item',
@@ -36,19 +35,23 @@
       }
     },
     components: {
-      TagBox
     },
     methods: {
-      clickTopic() {
-        this.$router.push('/topic')
+      clickTopic(id) {
+        this.$router.push({
+          name: 'topic',
+          params: {id}
+        })
       }
     },
     // 获取topic列表
     created() {
       request({
-        url: '/topic'
+        url: '/api/topics'
       }).then(res => {
-        this.topics = res.data
+        console.log(res.data)
+        
+        this.topics = res.data.topics
       })
     }
     
@@ -63,6 +66,7 @@
     clear: left;
     border-bottom: 1px solid #dddddd;
     cursor: pointer;
+    position: relative;
     &:hover{
       background: #f6f6f6;
     }
@@ -87,10 +91,11 @@
     }
   }
   
-  .tag{
+  .tag-box{
+    @include tag-box;
     float: left;
     position: relative;
-    top: 50%;
+    top: 25px;
     transform: translateY(-50%);
   }
   

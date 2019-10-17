@@ -5,7 +5,7 @@
       <template>
         <span v-if="!isLogin">请登录</span>
         <div v-else>
-          <img class="user-avatar" src="~@assets/img/avater-default.png" alt="默认头像">
+          <img class="user-avatar" src="~@assets/img/avatar-default.png" alt="默认头像">
           <div class="user-name"><span>{{this.$store.state.user.username}}</span></div>
         </div>
       </template>
@@ -69,7 +69,14 @@
         this.$router.replace(path)
       },
       create() {
-        this.router('/create')
+        if(this.$store.state.user.username) {
+          this.router('/create')
+        }
+        else {
+          alert('请先登录')
+          if(this.$route.path != '/login')
+          this.$router.push('/login')
+        }
       },
     },
     computed: {
