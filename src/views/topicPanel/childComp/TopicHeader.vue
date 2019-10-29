@@ -3,7 +3,7 @@
     <span class="tag-box">{{topicHeader.tag}}</span>
     <span class="title">{{topicHeader.title}}</span>
     <div class="header-detail">
-      <span class="separate">发布于{{getDate(topicHeader.timestamp)}} </span>
+      <span class="separate">发布于{{getDate(topicHeader.create_time)}} </span>
       <span class="separate">作者{{topicHeader.author}} </span>
       <span class="separate">{{topicHeader.browsed}}次浏览 </span>
       <span class="separate">来自 {{topicHeader.tag}} </span>
@@ -12,13 +12,6 @@
 </template>
 
 <script>
-  // function (timestamp) {
-  //   var launchTime = new Date(timestamp)
-  //   var year = launchTime.getFullYear()
-  //   var month = launchTime.getMonth()
-  //   var date = launchTime.getDate()
-  //   return `${year}年${month}月${date}日`
-  // }
   export default {
     name: 'topic-header',
     components: {
@@ -32,11 +25,11 @@
       topicHeader: Object
     },
     methods: {
-      getDate(timestamp) {
-        var launchTime = new Date(timestamp)
-        var year = launchTime.getFullYear()
-        var month = launchTime.getMonth()
-        var date = launchTime.getDate()
+      getDate(create_time) {
+        var createDate = new Date(create_time)
+        var year = createDate.getFullYear()
+        var month = createDate.getMonth()
+        var date = createDate.getDate()
         return `${year}年${month}月${date}日`
       }
     }

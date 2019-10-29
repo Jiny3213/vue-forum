@@ -1,16 +1,14 @@
 import {request} from './request.js'
 
-// 用户输入昵称时，测试是否重名
-function testUsername(username) {
+// 验证邮箱或用户名是否存在
+function testExist({key, value}) {
   return request({
-    url: '/testusername',
-    params: {
-      username: username
-    }
+    url: '/api/testexist',
+    params: {key, value}
   })
 }
 
-// 注册，保存token
+// 注册
 function register(email, username, password) {
   return request({
     url: '/register',
@@ -20,20 +18,10 @@ function register(email, username, password) {
       username,
       password
     }
-  }).then(res => {
-    if(res.data.msg == 'ok') {
-      localStorage.setItem('token', "Bearer " + res.data.token)
-      // 返回用户数据，保存到vuex中
-      return res.data.user
-    }
-    else {
-      // 服务端验证失败
-      return null
-    }
   })
 }
 
 export default {
-  testUsername,
-  register
+  register,
+  testExist
 }

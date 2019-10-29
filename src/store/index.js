@@ -9,19 +9,20 @@ const store = new Vuex.Store({
     // 用于保存状态,在组件dom中使用：$store.state.counter
     counter: 1000,
     user: {
-      username: null
+      username: null,
+      avatar: null
     }
   },
   mutations: {
-    // 方法,在组件method中使用：this.$store.commit('increment')
-    increment(state) {
-      state.counter++
-    },
+    // 登录后设定数据
     setUser(state, user) {
       state.user.username = user.username
+      state.user.avatar = user.avatar
     },
+    // 退出登录删除数据
     logout(state) {
       state.user.username = null
+      state.user.avatar = null
     }
   },
   getters: {

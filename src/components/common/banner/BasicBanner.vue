@@ -2,7 +2,7 @@
   <div class="basic-banner">
     <!-- 轮播图 -->
     <transition-group tag="ul" class="slide-ul" name="list">
-      <li v-for="(img, index) in imgs" :key='index' v-show="flag == index">
+      <li v-for="(img, index) in imgs" :key="index + 1" v-show="flag == index">
         <a href="">
           <img class="img-item" :src="img" alt="ad" >
         </a>

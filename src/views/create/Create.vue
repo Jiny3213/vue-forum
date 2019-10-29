@@ -4,6 +4,7 @@
       <div class="main-title">
         发布话题
       </div>
+      
       <div class="input-form">
         <form action="">
           <!-- 选择话题标签 -->
@@ -16,6 +17,7 @@
               <option class="option" value="test">测试</option>
             </select>
           </div>
+          
           <!-- 输入标题 -->
           <div class="title">
             <input type="text" placeholder="标题" v-model="title">
@@ -28,8 +30,6 @@
       
       <!-- 提交 -->
       <button class="submit" @click="submit">提交</button>
-      <!-- <button class="submit" @click="test">测试</button> -->
-      <!-- <div class="text-area" v-html="content"></div> -->
     </template>
   </basic-panel>
   
@@ -38,7 +38,7 @@
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel'
   import WangEditor from '@components/common/WangEditor.vue'
-  import {sendTopic} from '@network/sendTopic.js'
+  import {sendTopic} from '@network/sendData.js'
   
   export default{
     name: 'create',
@@ -61,18 +61,50 @@
       WangEditor
     },
     methods: {
+      // 提交文章
       submit() {
-        var data = {
-          tag: this.tagName[this.tag], 
-          title: this.title, 
-          content: this.$refs.editor.editorContent
-        } 
-        sendTopic.call(this, data)
+        // 提交数据体包括tag, title, content, author
+        var tag = this.tagName[this.tag]
+        var title = this.title
+        var content = this.$refs.editor.editorContent
+        var author = this.$store.state.user.username
+        
+        // 提交前检查：是否登录，信息是否完整， 文章内容是否达标
+        var text = this.$refs.editor.editor.txt.text()
+        if(!author) {
+          alert('请登录后再尝试')
+          return
+        }
+        else if(!tag || !title || !text) {
+          alert('请填写完整的信息')
+          return
+        }
+        else if(title.length > 20) {
+          alert('标题过长，请输入20个字符以内的标题')
+          return
+        }
+        else if(text.length <10) {
+          alert('文章内容必须大于10个字符')
+          return
+        }
+        
+        sendTopic({tag, title, content, author})
+          .then(res => {
+            if(res.data.msg == 'ok') {
+              alert('提交成功')
+              this.$router.replace('/')
+              location.reload()
+            }
+            else if(res.data.msg == 'login'){
+              alert('请登录后再进行操作')
+              this.$router.replace('/login')
+            }
+            else {
+              alert('服务器繁忙，请稍后再试')
+              this.$router.replace('/')
+            }
+          })
       },
-      // test() {
-      //   this.$refs.editor.test()
-      //   this.content = this.$refs.editor.editorContent
-      // }
     }
   }
 </script>
@@ -126,5 +158,4 @@
     @include basic-button;
     margin: 10px auto 0 auto;
   }
-  // @import url("~@assets/css/text.css");
 </style>

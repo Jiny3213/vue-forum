@@ -11,11 +11,19 @@ const About = () => import('@views/about/About.vue')
 const Create = () => import('@views/create/Create.vue')
 const Test = () => import('@views/test/Test.vue')
 
+const Profile = () => import('@views/profile/Profile.vue')
+const ProfileAvatar = () => import('@views/profile/ProfileAvatar.vue')
+const ProfileMain = () => import('@views/profile/ProfileMain.vue')
+const ProfileMod = () => import('@views/profile/ProfileMod.vue')
+
+const SearchPanel = () => import('@views/search/SearchPanel.vue')
+const NotFound = () => import('@views/notFound/NotFound.vue')
+
 // 安装插件
 Vue.use(VueRouter)
 
 // 引入vuex，检查是否登录
-import store from '../store/index.js'
+// import store from '../store/index.js'
 
 // 创建路由对象
 var routes = [
@@ -69,20 +77,65 @@ var routes = [
     meta: {
       title: '新建文章'
     },
-    beforeEnter: (to, from, next) => {
-      if(router.app.$store.state.user.username) {
-        next()
+    // beforeEnter: (to, from, next) => {
+    //   if(router.app.$store.state.user.username) {
+    //     next()
+    //   }
+    //   else {
+    //     next('/login')
+    //     alert('请先登录')
+    //   }
+    // }
+  },
+  {
+    path: '/profile',
+    redirect: '/profile/main',
+    component: Profile,
+    meta: {
+      title: '我的资料'
+    },
+    children: [
+      {
+        path: 'main',
+        component: ProfileMain,
+        meta: {
+          title: '我的资料'
+        },
+      },
+      {
+        path: 'avatar',
+        component: ProfileAvatar,
+        meta: {
+          title: '修改头像'
+        },
+      },
+      {
+        path: 'mod',
+        component: ProfileMod,
+        meta: {
+          title: '修改密码'
+        }
       }
-      else {
-        next('/login')
-        alert('请先登录')
-      }
+    ]
+  },
+  {
+    path: '/search/:query',
+    component: SearchPanel,
+    name: 'search',
+    meta: {
+      title: '搜索'
+    }
+  },
+  {
+    path: '*',
+    component: NotFound,
+    meta: {
+      title: '404'
     }
   }
 ]
 const router = new VueRouter({
   routes,
-  // 默认使用hash带有#号的路径，修改mode变成常见的url
   mode: 'history'
 })
 

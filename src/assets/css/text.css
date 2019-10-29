@@ -37,6 +37,9 @@
   background-color: #f1f1f1;
 }
 .text-area code {
+  /* 新增 */
+  overflow: auto;
+  
   display: inline-block;
   background-color: #f1f1f1;
   border-radius: 3px;
@@ -64,8 +67,9 @@
   outline: none;
 }
 .text-area img {
+  /* width: 80%; */
   cursor: pointer;
 }
-.text-area img:hover {
+/* .text-area img:hover {
   box-shadow: 0 0 5px #333;
-}
+} */

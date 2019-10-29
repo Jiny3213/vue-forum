@@ -24,7 +24,12 @@ export function request(config) {
   
   // 响应拦截
   instance.interceptors.response.use(res => {
-    // console.log('响应成功')
+    if(res.data.msg) {
+      if(res.data.msg === 'login') {
+        alert('请登录再试')
+        location.reload()
+      }
+    }
     // 必须返回
     return res
   }, err => {

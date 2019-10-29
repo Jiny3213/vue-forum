@@ -1,35 +1,39 @@
 <template>
   <div class="index-aside">
-    <basic-panel class="panel">
+    <basic-panel class="panel my">
       <template v-slot:header>个人信息</template>
       <template>
-        <span v-if="!isLogin">请登录</span>
-        <div v-else>
-          <img class="user-avatar" src="~@assets/img/avatar-default.png" alt="默认头像">
-          <div class="user-name"><span>{{this.$store.state.user.username}}</span></div>
+        <div class="my-holder">
+          <button v-if="!isLogin" class="please-login" @click="login">请登录</button>
+          <div v-else>
+            <img class="user-avatar" :src="avatarSrc" alt="默认头像">
+            <div class="user-name"><span @click="profile">{{this.$store.state.user.username}}</span></div>
+          </div>
         </div>
       </template>
     </basic-panel>
     
     <basic-panel class="panel create" :isHeader="false">
       <template>
+        <div class="my-holder">
+          <button v-if="!isLogin" class="please-login" @click="login">请登录</button>
+          <div v-else>
+            <img class="user-avatar" :src="avatarSrc" alt="默认头像">
+            <div class="user-name"><span @click="profile">{{this.$store.state.user.username}}</span></div>
+          </div>
+        </div>
         <button class="create-button" @click="create">发布话题</button>
       </template>
     </basic-panel>
     
-    <basic-panel class="panel">
+    <basic-panel class="panel banner">
       <template v-slot:header>轮播图</template>
       <template>
         <basic-banner></basic-banner>
       </template>
     </basic-panel>
     
-    <basic-panel class="panel">
-      <template v-slot:header>积分榜</template>
-      <template>积分榜</template>
-    </basic-panel>
-    
-    <basic-panel class="panel">
+    <basic-panel class="panel community">
       <template v-slot:header>Node.js 开源技术社区</template>
       <template>
         <a href="https://cnodejs.org/" target="_blank">
@@ -40,10 +44,15 @@
       </template>
     </basic-panel>
     
-    <basic-panel class="panel">
-      <template v-slot:header>关注我</template>
+    <basic-panel class="panel focus-me">
+      <template v-slot:header>关于我</template>
       <template>
-        github: <a class="my-github" href="https://github.com/Jiny3213" target="_blank">https://github.com/Jiny3213</a>
+        <p>
+          github: <a class="my-github" href="https://github.com/Jiny3213" target="_blank">https://github.com/Jiny3213</a>
+        </p>
+        <p>
+          静态页面：<a class="my-github" href="https://jiny3213.github.io/" target="_blank">https://jiny3213.github.io/</a>
+        </p>
       </template>
     </basic-panel>
   </div>
@@ -52,6 +61,7 @@
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel.vue'
   import BasicBanner from '@components/common/banner/BasicBanner.vue'
+  import {baseURL} from '@network/request.js'
   
   export default{
     name: 'index-aside',
@@ -78,11 +88,27 @@
           this.$router.push('/login')
         }
       },
+      profile() {
+        if(this.$store.state.user.username) {
+          this.router('/profile')
+        }
+      },
+      login() {
+        this.router('/login')
+      }
     },
     computed: {
+      // 判断是否登录
       isLogin() {
         if(this.$store.state.user.username) return true
         else return false
+      },
+      // 计算头像src
+      avatarSrc() {
+        if(this.$store.state.user.avatar) {
+          return baseURL + '/uploads/face/' + this.$store.state.user.avatar
+        }
+        else return baseURL + '/public/img/default/avatar-default.png'
       }
     },
   }
@@ -93,6 +119,18 @@
     width: 290px;
     margin-bottom: 12px;
   }
+  .my-holder{
+    position: relative;
+    height: 50px;
+  }
+  // 登录提示
+  .please-login{
+    @include dark-button;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  // 用户头像
   .user-avatar{
     width: 48px;
     border: 1px solid $bgGrey;
@@ -108,17 +146,25 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      cursor: pointer;
+      &:hover{
+        text-decoration: underline;
+      }
     }
   }
   .create{
     position: relative;
+    .create-button{
+      @include basic-button;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .my-holder{
+      display: none;
+    }
   }
-  .create-button{
-    @include basic-button;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+  
   .logo{
     background-color: #444444;
     box-sizing: border-box;
@@ -129,6 +175,34 @@
     color: #00f;
     &:hover{
       text-decoration: underline;
+    }
+  }
+  
+  // 移动端
+  @media (max-width: $action-width) {
+    .panel{
+      width: 100%;
+      margin: 10px auto;
+    }
+    .my{
+      display: none;
+    }
+    .create{
+      .my-holder{
+        display: block;
+      }
+      .create-button{
+        right: 15px;
+      }
+    }
+    .community{
+      display: none;
+    }
+    .banner{
+      display: none;
+    }
+    .focus-me{
+      display: none;
     }
   }
 </style>

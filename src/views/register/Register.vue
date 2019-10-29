@@ -1,54 +1,61 @@
 <template>
   <basic-panel>
     <template #header>
-      <span class='main-title'>登录</span>
+      <span class='main-title'>注册</span>
     </template>
     
     <template>
           <form class="input-form">
             <div class="input-box">
               <label for="email">注册邮箱</label>
-              <div class="good-input">
-                <input type="text" name="email" 
-                v-model.trim="email" @input="inputEmail">
+              <div class="right-box">
+                <div class="good-input">
+                  <input type="text" name="email" id="email" 
+                  v-model.trim="email" @input="inputEmail">
+                </div>
+                <p class="alert" v-show="email">{{emailTips}}</p>
               </div>
-              <!-- 提示信息 -->
-              <span class="alert" v-show="email">{{emailTips}}</span>
             </div>
             
             <div class="input-box">
               <label for="username">昵称</label>
-              <div class="good-input">
-                <input type="text" name="username" 
-                v-model.trim="username" @input="inputUsername"
-                placeholder="2-10个字符">
+              <div class="right-box">
+                <div class="good-input">
+                  <input type="text" name="username" id="username"
+                  v-model.trim="username" @input="inputUsername"
+                  placeholder="2-10个字符">
+                </div>
+                <p class="alert" v-show="username">{{usernameTips}}</p>
               </div>
-              <!-- 提示信息 -->
-              <span class="alert" v-show="username">{{usernameTips}}</span>
             </div>
             
             <div class="input-box">
               <label for="password">密码</label>
-              <div class="good-input">
-                <input type="password" name="password" 
-                v-model="password" @input="inputPassword"
-                placeholder="6-12位字符的密码">
+              <div class="right-box">
+                <div class="good-input">
+                  <input type="password" name="password" id="password"
+                  v-model="password" @input="inputPassword"
+                  placeholder="6-12位字符的密码">
+                </div>
+                <p class="alert" v-show="password">{{passwordTips}}</p>
               </div>
-              <!-- 提示信息 -->
-              <span class="alert" v-show="password">{{passwordTips}}</span>
             </div>
             
             <div class="input-box">
               <label for="confirm">再次确认密码</label>
-              <div class="good-input">
-                <input type="password" name="confirm" 
-                v-model="confirm" @input="inputConfirm"
-                placeholder="请再次确认密码">
+              <div class="right-box">
+                <div class="good-input">
+                  <input type="password" name="confirm" id="confirm"
+                  v-model="confirm" @input="inputConfirm"
+                  placeholder="请再次确认密码">
+                </div>
+                <p class="alert" v-show="confirm">{{confirmTips}}</p>
               </div>
-              <!-- 提示信息 -->
-              <span class="alert" v-show="confirm">{{confirmTips}}</span>
             </div>
-            <button class="submit" @click.prevent="submit">注册</button>
+            <div class="submit-box">
+              <button class="submit" @click.prevent="submit">注册</button>
+              <a @click="$router.push('/login')">已经注册？前往登录</a>
+            </div>
           </form>
     </template>
   </basic-panel>
@@ -93,7 +100,7 @@
     },
     methods: {
       // 验证邮箱
-      inputEmail() {
+      inputEmail: debounce(function() {
         if(!this.email) {
           this.isEmailAvailable = false
         }
@@ -101,15 +108,28 @@
           this.isEmailAvailable = false
           this.emailTips = '请输入正确的邮箱！！'
         }
-        else if(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
-          this.isEmailAvailable = true
-          this.emailTips = '√'
-        }
-        else {
+        else if(!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
           this.isEmailAvailable = false
           this.emailTips = '请输入正确的邮箱格式'
         }
-      },
+        else {
+          // 此处发送请求
+          Register.testExist({
+            key: 'email',
+            value: this.email
+          }).then(res => {
+            if(res.data.msg == 'ok') {
+              this.isEmailAvailable = true
+              this.emailTips = '√'
+            }
+            else {
+              this.isEmailAvailable = false
+              this.emailTips = '该邮箱已注册'
+            }
+          })
+        }
+      }) ,
+      
       //验证昵称
       inputUsername: debounce(function() {
         if(!this.username) {
@@ -124,20 +144,19 @@
           this.usernameTips = '昵称不应包含空格'
         }
         else {
-          Register.testUsername(this.username)
-            .then(res => {
-              var available = res.data.available
-              if(!available) {
-                this.isUsernameAvailable = false
-                this.usernameTips = '昵称重复'
-              }
-              else {
-                this.isUsernameAvailable = true
-                this.usernameTips = '√'
-              }
-              // 测试debounce效果
-              // console.log(res.data.available)
-            }) 
+          Register.testExist({
+            key: 'username',
+            value: this.username
+          }).then(res => {
+            if(res.data.msg == 'ok') {
+              this.isUsernameAvailable = true
+              this.usernameTips = '√'
+            }
+            else {
+              this.isUsernameAvailable = false
+              this.usernameTips = '昵称已存在'
+            }
+          })
         }
       }),
       // 验证密码
@@ -182,14 +201,17 @@
         else if(this.isEmailAvailable && this.isUsernameAvailable && this.isPasswordAvailable && this.isConfirmAvailable) {
           // 注册
           Register.register(this.email, this.username, this.password)
-            .then(user => {
-              if(user) {
-                this.$store.commit('setUser', user)
+            .then(res => {
+              if(res.data.msg == 'ok') {
+                localStorage.setItem('token', "Bearer " + res.data.token)
+                // 返回用户数据，保存到vuex中
+                this.$store.commit('setUser', res.data.user)
                 // 注册成功跳转
                 alert('注册成功')
                 this.$router.replace('/')
               }
               else {
+                // 服务端验证失败
                 alert('注册失败，请重试')
                 this.refresh()
               }
@@ -202,6 +224,7 @@
           alert('注册信息有误，请检查')
         }
       },
+      // 清空所有用户输入的数据
       refresh() {
         this.email = ""
         this.username = ""
@@ -218,26 +241,43 @@
   }
   .input-form{
     margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .input-box{
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+    display: flex;
     label{
-      display: inline-block;
-      width: 160px;
+      width: 100px;
       text-align: right;
-      margin-right: 20px;
-      font-size: $notice-font-size;
+      margin-right: 10px;
+      margin-left: -50px;
+      font-size: 16px;
+      padding-top: 3px;
     }
-    .good-input{
-      @include good-input;
-      display: inline-block;
-    }
-    .alert{
-      margin-left: 10px;
+    .right-box{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      .good-input{
+        @include good-input;
+      }
+      .alert{
+        margin-top: 10px;
+      }
     }
   }
-  .submit{
-    @include basic-button;
-    margin-left: 180px;
+  .submit-box{
+    .submit{
+      @include basic-button;
+      margin-left: 65px;
+    }
+    a{
+      margin-left: 10px;
+      color: #1E88E5;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   }
 </style>

@@ -1,18 +1,14 @@
 $bgGreen: #80bd01;
 $bgGrey: #e1e1e1;
 
+// 响应式布局，响应宽度
+$action-width: 825px;
+
+
 // 醒目的标题
 @mixin main-title {
   font-size: 20px;
   font-weight: bold;
-}
-
-@mixin clearfix {
-  &::after {
-    content: '';
-    display: block;
-    clear: both;
-  }
 }
 
 $notice-font-size: 16px;
@@ -22,7 +18,6 @@ $small-font-size: 12px;
 // 好看的输入框
 @mixin good-input {
   // 来源于create组件，记得重构
-    margin-top: 10px;
     height: 30px;
     border: 1px solid $bgGrey;
     border-radius: 5px;
@@ -53,6 +48,21 @@ $small-font-size: 12px;
     outline: none;
     &:hover{
       background-color: lighten($bgGreen, 5%);
+    }
+  }
+// 灰暗的按钮
+@mixin dark-button{
+    color: #fff;
+    font-size: 16px;
+    background-color: #888;
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    &:hover{
+      background-color: lighten(#888, 10%);
     }
   }
   

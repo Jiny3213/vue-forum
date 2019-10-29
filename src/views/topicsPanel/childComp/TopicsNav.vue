@@ -1,7 +1,7 @@
 <template>
   <ul class="nav">
-    <li v-for="(item, index) in nav">
-      <a href="" :class="{active: isActive == index}" @click.prevent="clickNav(index)">
+    <li v-for="(item, index) in nav" :key="index">
+      <a href="" :class="{active: isActive == index}" @click.prevent="clickNav(index, item)">
         {{item}}
       </a>
     </li>
@@ -15,19 +15,24 @@
       return {
         nav: [
           '全部',
-          '精华',
+          // '精华',
           '分享',
           '问答',
           '求职',
-          '客户端测试'
+          '测试'
         ],
         isActive: 0,
+        currentTag: '全部'
       }
     },
     methods: {
-      clickNav(index) {
-        console.log(index)
+      clickNav(index, item) {
+        if(this.currentTag == item) return
+        // 改变样式
         this.isActive = index
+        this.currentTag = item
+        // 请求数据
+        this.$emit('getTopicByTag', 'tag')
       }
     },
   }
@@ -46,7 +51,7 @@
     align-items: center;
   }
   .nav li a{
-    padding: 3px 2px 3px 2px;
+    padding: 3px 4px 3px 4px;
     line-height: 1;
     border-radius: 4px;
   }

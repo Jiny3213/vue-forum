@@ -3,18 +3,19 @@
     <basic-panel>
       <template #header>
         {{topicComments.length}} 回复
-        <!-- <img src="/src/assets/img/avatar-default.png" alt=""> -->
       </template>
       
       <template>
         <div class="reply-item" v-for="(comment, index) in topicComments" :key="index">
-          <avatar class="avatar"/>
+          <div class="avatar">
+            <img :src="avatarSrc(comment.commenter_avatar)" alt="">
+          </div>
           <div class="agree">
             <img src="../../../assets/img/svg/agree-normal.svg" alt="">
             <span>{{comment.prefer}}</span>
           </div>
           <a href="" class="replyer">{{comment.commenter}}</a>
-          <a href="" class="reply-timer">{{comment.floor}}楼 • {{comment.timestamp}}</a>
+          <a href="" class="reply-timer">{{comment.floor}}楼 • {{getDate(comment.create_time)}}</a>
           <p class="reply-content">{{comment.content}}</p>
         </div>
       </template>
@@ -37,34 +38,46 @@
 
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel.vue'
-  import Avatar from '@components/common/avatar/Avatar.vue'
   import WangEditor from '@components/common/WangEditor.vue'
-  import {request} from '@network/request.js'
+  import {sendComment} from '@network/sendData.js'
+  import {baseURL} from '@network/request.js'
   
   export default {
     name: 'topic-comments',
     components: {
       BasicPanel,
-      Avatar,
       WangEditor
-    },
-    data() {
-      return {
-        
-      }
     },
     props: {
       topicComments: Array,
       topicHeader: Object
     },
+    computed: {
+      // 计算头像src
+      avatarSrc() {
+        return function(avatar) {
+          if(avatar) {
+            return baseURL + '/uploads/face/' + avatar
+          }
+          else return baseURL + '/public/img/default/avatar-default.png'
+        }
+      }
+    },
     methods: {
+      getDate(create_time) {
+        var createDate = new Date(create_time)
+        var year = createDate.getFullYear()
+        var month = createDate.getMonth()
+        var date = createDate.getDate()
+        return `${year}年${month}月${date}日`
+      },
       // 提交评论
       submit() {
         // 获取基础数据
         var text = this.$refs.editor.editor.txt.text()
         var username = this.$store.state.user.username
-        var id = this.topicHeader.id
-        var timestamp = new Date().getTime()
+        var topic_id = this.topicHeader.topic_id
+        // var timestamp = new Date().getTime()
         // 评论非空
         if(!text.replace(/&nbsp;| /g, '')) {
           alert('请输入评论内容')
@@ -77,15 +90,11 @@
         }
         var comment = {
           commenter: username,
-          timestamp,
+          // timestamp,
           content: text,
-          id
+          topicId: topic_id
         }
-        request({
-          url: '/api/comment',
-          method: 'post',
-          data: comment
-        })
+        sendComment(comment)
           .then(res => {
             if(res.data.msg == 'ok') {
               alert('提交成功')
@@ -117,6 +126,9 @@
     width: 30px;
     float: left;
     margin-right: 10px;
+    img{
+      width: 100%;
+    }
   }
   .replyer{
     color: #666666;

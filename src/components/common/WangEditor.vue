@@ -14,26 +14,19 @@
       }
     },
     props: {
-      // topic 默认值
-      // comment
+      // 可选：comment, topic
       type: {
         type: String,
         default: 'topic'
       }
     },
-    methods: {
-      test() {
-        var json = this.editor.txt.getJSON()
-        var jsonStr = JSON.stringify(json)
-        console.log(JSON.parse(JSON.stringify(this.editorContent)))
-        console.log(this.editor.txt.getJSON())
-        console.log(typeof(this.editorContent))
-      }
-    },
     mounted() {
       var editor = new E(this.$refs.editor)
+      // 移动端宽度不够用
+      var isMobile = matchMedia('(max-width: 825px)').matches
       // 设置菜单选项
-      if(this.type == 'topic') {
+      // 发布文章用
+      if(this.type == 'topic' && !isMobile) {
         editor.customConfig.menus = [
           'head',  // 标题
           'bold',  // 粗体
@@ -51,7 +44,8 @@
           'code',  // 插入代码
         ]
       }
-      else if(this.type == 'comment') {
+      // 评论用
+      else if(this.type == 'comment' || isMobile) {
         editor.customConfig.menus = [
           'bold',  // 粗体
           'fontSize',  // 字号

@@ -14,13 +14,13 @@
   import TopicHeader from './childComp/TopicHeader'
   import TopicContent from './childComp/TopicContent'
   import TopicComments from './childComp/TopicComments'
-  import {getTopic} from '@network/getTopic'
+  import {getTopic} from '@network/getData'
   
   export default {
     name: 'topic-panel',
     data() {
       return {
-        id: null,
+        topic_id: null,
         topicContent: '',
         topicHeader: {},
         topicComments: []
@@ -34,12 +34,47 @@
     },
     created() {
       // 向服务器请求文章相关数据,回复后需要再次调用
-      this.id = this.$route.params.id
+      this.topic_id = this.$route.params.id
       this.getTopic()
     },
     methods: {
       getTopic() {
-        getTopic.call(this, this.id)
+        getTopic(this.topic_id)
+        .then(res => {
+          if(res.data.msg == 'ok') {
+            var topic = res.data.topic
+            this.topicContent = topic.content
+            // 定义头部信息
+            var {
+              topic_id,
+              author,
+              tag,
+              title,
+              prefer,
+              browsed,
+              create_time,
+              last_modify_time,
+              status
+            } = topic
+            this.topicHeader = {
+              topic_id,
+              author,
+              tag,
+              title,
+              prefer,
+              browsed,
+              create_time,
+              last_modify_time,
+              status
+            }
+            // 定义评论信息
+            this.topicComments = topic.comments
+          }
+          else {
+            alert('网络繁忙，请稍后再试')
+            this.$router.replace('/')
+          }
+        })
       }
     }
   }

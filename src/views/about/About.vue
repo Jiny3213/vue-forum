@@ -2,15 +2,27 @@
   <div>
     <basic-panel>
       <template #header>
-        关于本站
+        开发日志
       </template>
       
       <template>
-        <p>本站由Jiny独立开发，模仿CNode社区的一个小项目</p>
+        <p>本站由Jiny独立开发，前端技术：基于vuejs的SPA，后端技术：node + express， mongodb数据库</p>
+        <br>
+        <p>服务器和数据库在阿里云，由于没有时间注册备案域名，目前仅能通过ip访问</p>
+        <br>
+        <h2>更新内容：（10.28）</h2>
+        <ul>
+          <li>使用mongodb数据库，保存用户信息和文章</li>
+          <li>响应式布局</li>
+          <li>增加头像修改功能，能够在文章列表和评论中显示</li>
+          <li>增加用户档案页，支持修改密码</li>
+          <li>话题列表分页展示，根据tag筛选展示</li>
+        </ul>
         <br>
         <h2>更新内容：（10.17）</h2>
         <ul>
           <li>完成文章发布，回复功能，重构部分代码</li>
+          <li>使用json储存用户信息和文章</li>
         </ul>
         <br>
         <h2>Todo:</h2>

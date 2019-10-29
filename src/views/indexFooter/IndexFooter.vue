@@ -1,6 +1,6 @@
 <template>
   <div class="index-footer">
-    底部
+    © 2019 Jinyuu
   </div>
 </template>
 
@@ -17,9 +17,7 @@
 
 <style scoped>
   .index-footer{
-    width: 100%;
-    height: 200px;
-    background: #fff;
     clear: both;
+    text-align: center;
   }
 </style>
