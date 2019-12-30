@@ -6,22 +6,28 @@
     
     <template>
           <form class="input-form">
-            <div class="input-box">
-              <label for="email">登录邮箱</label>
-              <div class="right-box">
-                <div class="good-input">
-                  <input type="text" name="email" v-model="email" id="email">
-                </div>
-              </div>
-            </div>
-            <div class="input-box">
-              <label for="password">密码</label>
-              <div class="right-box">
-                <div class="good-input">
-                  <input type="password" name="password" v-model="password" id="password">
-                </div>
-              </div>
-            </div>
+            <!-- 邮箱 -->
+            <good-input label="登录邮箱" label-id="email">
+              <input type="text" name="email" v-model="email" id="email">
+            </good-input>
+            
+            <!-- 密码 -->
+            <good-input label="密码" label-id="password">
+              <input type="password" name="password" v-model="password" id="password">
+            </good-input>
+            
+            <!-- 验证码输入 -->
+            <good-input label="验证码" label-id="captcha">
+              <input type="text" name="captcha" v-model="captcha" id="captcha">
+              <template #hint>
+                <p v-show="isCaptchaWrong">{{captchaTips}}</p>
+              </template>
+            </good-input>
+            
+            <!-- 验证码图片 -->
+            <captcha ref="captcha"/>
+            
+            <!-- 提交 -->
             <div class="submit-box">
               <button class="submit" @click.prevent="submit">登录</button>
               <a @click="$router.push('/register')">未有账号？前往注册</a>
@@ -35,16 +41,24 @@
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel'
   import {login} from '@network/login'
+  import GoodInput from '@components/common/GoodInput'
+  import Captcha from '@components/common/Captcha'
+  
 	export default {
     name: 'login',
 		data() {
 			return {
         email: '',
-        password: ''
+        password: '',
+        captcha: '',
+        captchaTips: '验证码错误！',
+        isCaptchaWrong: false
       }
     },
     components: {
-      BasicPanel
+      BasicPanel,
+      GoodInput,
+      Captcha
     },
     methods: {
       // 登录
@@ -53,9 +67,10 @@
           alert('登录邮箱或密码不能为空')
           return
         }
-        login(this.email, this.password)
+        login(this.email, this.password, this.captcha)
           .then(res => {
             if(res.data.msg == 'ok') {
+              this.isCaptchaWrong = false
               alert('登录成功')
               // 储存token到本地
               localStorage.setItem('token', "Bearer " + res.data.token)
@@ -63,12 +78,20 @@
               this.$store.commit('setUser', res.data.user)
               this.$router.replace('/')
             }
+            // 验证码错误
+            else if(res.data.msg == 'captcha wrong') {
+              this.isCaptchaWrong = true
+              this.captcha = ''
+              // 刷新验证码
+              this.$refs.captcha.getNewCaptcha()
+            }
             else {
+              this.isCaptchaWrong = false
               alert('登录失败，请检查登录邮箱或密码是否正确')
             }
           })
       },
-    }
+    },
 	}
 </script>
 
@@ -82,29 +105,7 @@
     flex-direction: column;
     align-items: center;
   }
-  .input-box{
-    margin-bottom: 10px;
-    display: flex;
-    label{
-      width: 100px;
-      text-align: right;
-      margin-right: 10px;
-      margin-left: -50px;
-      font-size: 16px;
-      padding-top: 3px;
-    }
-    .right-box{
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      .good-input{
-        @include good-input;
-      }
-      .alert{
-        margin-top: 10px;
-      }
-    }
-  }
+  
   .submit-box{
     .submit{
       @include basic-button;
@@ -116,5 +117,10 @@
       text-decoration: underline;
       cursor: pointer;
     }
+  }
+  // 验证码图片居中
+  .captcha {
+    margin-left: 60px;
+    margin-bottom: 20px;
   }
 </style>

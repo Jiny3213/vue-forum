@@ -1,12 +1,13 @@
 import {request} from './request.js'
 
-function login(email, password) {
+function login(email, password, captcha) {
   return request({
     url: '/login',
     method: 'post',
     data: {
       email,
-      password
+      password,
+      captcha: captcha.toLowerCase()
     }
   })
 }
@@ -26,8 +27,14 @@ function getUser() {
   })
 }
   
+function getCaptcha() {
+  return request({
+    url: '/api/captcha'
+  })
+}
 
 export {
   login,
   getUser,
+  getCaptcha
 }

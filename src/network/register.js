@@ -9,14 +9,15 @@ function testExist({key, value}) {
 }
 
 // 注册
-function register(email, username, password) {
+function register(email, username, password, captcha) {
   return request({
     url: '/register',
     method: 'post',
     data: {
       email,
       username,
-      password
+      password,
+      captcha: captcha.toLowerCase()
     }
   })
 }

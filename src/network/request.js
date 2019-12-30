@@ -8,7 +8,9 @@ export function request(config) {
   // 创建axios实例
   const instance = axios.create({
     baseURL,
-    timeout: 5000
+    timeout: 5000,
+    // 带上cookies
+    withCredentials: true
   })
   // 请求拦截,在headers上加上token
   instance.interceptors.request.use(config => {
