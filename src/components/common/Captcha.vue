@@ -1,14 +1,13 @@
 <template>
   <!-- 此组件仅用于展示和切换验证码图片 -->
-  <div 
+  <div
   v-html="captchaSvg"
-  @click="getNewCaptcha" 
+  @click="getNewCaptcha"
   class="captcha"
   title="点击切换验证码"></div>
 </template>
 
 <script>
-  import {getCaptcha} from '@network/login'
   export default {
     name: 'captcha',
     data() {
@@ -19,7 +18,7 @@
     methods: {
       // 获取验证码
       getNewCaptcha() {
-        getCaptcha().then(res => {
+        this.$axios.login.getCaptcha().then(res => {
           this.captchaSvg = res.data
         })
       }

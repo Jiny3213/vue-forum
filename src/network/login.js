@@ -26,14 +26,14 @@ function getUser() {
     }
   })
 }
-  
+
 function getCaptcha() {
   return request({
-    url: '/api/captcha'
+    url: '/captcha'
   })
 }
 
-export {
+export default {
   login,
   getUser,
   getCaptcha

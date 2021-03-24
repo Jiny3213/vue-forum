@@ -4,7 +4,7 @@
       <template #header>
         {{topicComments.length}} 回复
       </template>
-      
+
       <template>
         <div class="reply-item" v-for="(comment, index) in topicComments" :key="index">
           <div class="avatar">
@@ -20,18 +20,18 @@
         </div>
       </template>
     </basic-panel>
-    
+
     <!-- 回复模块 -->
     <basic-panel class="add-panel">
       <template #header>
         添加回复
       </template>
-      
+
       <template>
         <wang-editor type="comment" ref="editor"></wang-editor>
         <button class="submit" @click="submit">回复</button>
       </template>
-      
+
     </basic-panel>
   </div>
 </template>
@@ -39,9 +39,8 @@
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel.vue'
   import WangEditor from '@components/common/WangEditor.vue'
-  import {sendComment} from '@network/sendData.js'
-  import {baseURL} from '@network/request.js'
-  
+  import {ORIGIN} from '../../../config'
+
   export default {
     name: 'topic-comments',
     components: {
@@ -57,9 +56,9 @@
       avatarSrc() {
         return function(avatar) {
           if(avatar) {
-            return baseURL + '/uploads/face/' + avatar
+            return ORIGIN + '/uploads/face/' + avatar
           }
-          else return baseURL + '/public/img/default/avatar-default.png'
+          else return ORIGIN + '/public/img/default/avatar-default.png'
         }
       }
     },
@@ -69,7 +68,7 @@
         var year = createDate.getFullYear()
         var month = createDate.getMonth()
         var date = createDate.getDate()
-        return `${year}年${month}月${date}日`
+        return `${year}年${month + 1}月${date}日`
       },
       // 提交评论
       submit() {
@@ -94,7 +93,7 @@
           content: text,
           topicId: topic_id
         }
-        sendComment(comment)
+        this.$axios.sendData.sendComment(comment)
           .then(res => {
             if(res.data.msg == 'ok') {
               alert('提交成功')

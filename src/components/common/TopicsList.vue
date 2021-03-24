@@ -27,8 +27,8 @@
 </template>
 
 <script>
-  import {baseURL} from '@network/request.js'
-  
+  import {ORIGIN} from '../../config'
+
   export default {
     name: 'topics-list',
     props: ['topics'],
@@ -37,9 +37,9 @@
       avatarSrc() {
         return function(avatar) {
           if(avatar) {
-              return baseURL + '/uploads/face/' + avatar
+              return ORIGIN + '/uploads/face/' + avatar
             }
-            else return baseURL + '/public/img/default/avatar-default.png'
+            else return ORIGIN + '/public/img/default/avatar-default.png'
         }
       },
       getTag() {
@@ -81,11 +81,11 @@
     margin-top: 7px;
     border: 1px solid #000000;
   }
-  
+
   .number{
     margin-left: 10px;
     height: 50px;
-    width: 40px;
+    width: 50px;
     line-height: 50px;
     .comments{
       font-size: 14px;
@@ -101,7 +101,7 @@
       }
     }
   }
-  
+
   .tag-box{
     span{
       @include tag-box;
@@ -111,7 +111,7 @@
     display: flex;
     align-items: center;
   }
-  
+
   .title{
     flex: 1;
     margin-left: 5px;
@@ -123,7 +123,7 @@
       text-decoration: underline;
     }
   }
-  
+
   .last-commenter-avatar{
     float: right;
     height: 20px;

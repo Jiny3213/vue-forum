@@ -4,7 +4,7 @@
       <topic-header :topicHeader="topicHeader"/>
       <topic-content :topicContent="topicContent"/>
     </basic-panel>
-    
+
     <topic-comments class="reply" :topicComments="topicComments" :topicHeader="topicHeader"/>
   </div>
 </template>
@@ -14,8 +14,7 @@
   import TopicHeader from './childComp/TopicHeader'
   import TopicContent from './childComp/TopicContent'
   import TopicComments from './childComp/TopicComments'
-  import {getTopic} from '@network/getData'
-  
+
   export default {
     name: 'topic-panel',
     data() {
@@ -39,7 +38,7 @@
     },
     methods: {
       getTopic() {
-        getTopic(this.topic_id)
+        this.$axios.getData.getTopic(this.topic_id)
         .then(res => {
           if(res.data.msg == 'ok') {
             var topic = res.data.topic

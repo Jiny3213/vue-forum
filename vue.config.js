@@ -1,4 +1,5 @@
 const path = require('path');
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -16,12 +17,18 @@ module.exports = {
   },
   css: {
     loaderOptions: {
-      scss:{
+      scss: {
         prependData: `@import "~@assets/css/global.scss";`
       }
     }
   },
-  // devServer: {
-  //     proxy: 'http://localhost:8888'
-  //   }
+  devServer: {
+    proxy: {
+      '/': {
+        target: 'http://jinyuu.cn',
+        changeOrigin: true,
+        ws: false
+      }
+    },
+  }
 }

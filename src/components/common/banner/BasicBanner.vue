@@ -8,21 +8,19 @@
         </a>
       </li>
     </transition-group>
-    
+
     <div class="carousel-items">
-      <span class="carousel-item" 
-      v-for="(img, index) in imgs" 
+      <span class="carousel-item"
+      v-for="(img, index) in imgs"
       :key="index"
-      :class="{active: index == flag}" 
-      @mouseover="change(index)" 
+      :class="{active: index == flag}"
+      @mouseover="change(index)"
       @mouseleave="run"></span>
     </div>
   </div>
 </template>
 
 <script>
-  import {request, baseURL} from '@network/request.js'
-  
   export default {
     name: 'basic-banner',
     data() {
@@ -50,11 +48,9 @@
     },
     created() {
       // 请求轮播图url
-      request({
-        url: '/banner'
-      }).then(res => {
+      this.$axios.getData.getBanner().then(res => {
         this.imgs = res.data.map(path => {
-          return baseURL + path
+          return 'http://localhost:3000' + path
         })
       })
     },
@@ -72,7 +68,7 @@
     height: 125px;
     position: relative;
   }
-  
+
   /* 图片 */
   .slide-ul{
     height: 100%;
@@ -118,7 +114,7 @@
   .list-enter-to {
     transform: translateX(0);
   }
-  
+
   .list-leave-active, .list-enter-active {
     transition: all 1s ease;
   }
@@ -128,6 +124,6 @@
   .list-leave-to {
    transform: translateX(-100%)
  }
-  
+
 
 </style>

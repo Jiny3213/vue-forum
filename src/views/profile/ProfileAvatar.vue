@@ -24,8 +24,8 @@
 
 <script>
   import Cropper from './childComp/Cropper.vue'
-  import {uploadAvatar} from '@network/sendData.js'
-  
+  import {uploadAvatar} from '../../network/sendData.js'
+
   export default {
     name: 'profile-avatar',
     data() {
@@ -40,8 +40,6 @@
     methods: {
       // 第一步用户选择图片：读取图片，放进cropper
       readFile() {
-        // this.isPreviewShow = false
-        // this.isCropButtonShow = false
         this.isUploadShow = false
         var file = this.$refs.file.files[0]
         if(!file) {
@@ -57,14 +55,10 @@
       },
       // 再次选择图片
       getFile() {
-        this.$refs.file.dispatchEvent(new MouseEvent('click')) 
+        this.$refs.file.dispatchEvent(new MouseEvent('click'))
       },
       // 调用cropper组件方法截图
       crop() {
-        // if(!this.$refs.file.files[0]) {
-        //   alert('请先选择图片~')
-        //   return
-        // }
         this.$refs.cropper.getCropData()
         this.isPreviewShow = true
       },
@@ -87,21 +81,22 @@
           canvas.toBlob(blob => {
             // 预计原始截图40kb，压缩后8kb
             // console.log(`截图压缩后:${blob.size/1000}KB`)
-            resolve(blob) 
+            console.log(blob)
+            resolve(blob)
           }, "image/jpeg", 0.95)
-        }) 
+          let base64 = canvas.toDataURL('image/jpeg', 0.95) // jpeg才能压缩
+          console.log(base64)
+        })
       },
       // 上传头像
       upload() {
-        // if(!this.$refs.file.files[0]) {
-        //   alert('请选择图片~')
-        //   return
-        // }
         if(!this.$refs.preview.src) {
           alert('请截图再上传~')
           return
         }
         this.compass().then(blob => {
+          return
+          console.log(typeof uploadAvatar)
           var file = new File([blob], 'avatar.jpg', {type: 'image/jpeg'})
           var formData = new FormData()
           // 此处的键需要与后台upload.single('avatar')一致
@@ -118,7 +113,7 @@
               }
             })
         })
-        
+
       }
     }
   }
@@ -225,7 +220,7 @@
       margin-top: 10px;
     }
   }
-  
+
   // 移动端
   @media (max-width: $action-width) {
     .profile-avatar{

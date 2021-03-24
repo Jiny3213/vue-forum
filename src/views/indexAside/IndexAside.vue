@@ -12,7 +12,7 @@
         </div>
       </template>
     </basic-panel>
-    
+
     <basic-panel class="panel create" :isHeader="false">
       <template>
         <div class="my-holder">
@@ -25,14 +25,14 @@
         <button class="create-button" @click="create">发布话题</button>
       </template>
     </basic-panel>
-    
+
     <basic-panel class="panel banner">
       <template v-slot:header>轮播图</template>
       <template>
         <basic-banner></basic-banner>
       </template>
     </basic-panel>
-    
+
     <basic-panel class="panel community">
       <template v-slot:header>Node.js 开源技术社区</template>
       <template>
@@ -43,7 +43,7 @@
         </a>
       </template>
     </basic-panel>
-    
+
     <basic-panel class="panel focus-me">
       <template v-slot:header>关于我</template>
       <template>
@@ -61,8 +61,7 @@
 <script>
   import BasicPanel from '@components/common/panel/BasicPanel.vue'
   import BasicBanner from '@components/common/banner/BasicBanner.vue'
-  import {baseURL} from '@network/request.js'
-  
+  import {ORIGIN} from '../../config'
   export default{
     name: 'index-aside',
     data() {
@@ -75,7 +74,7 @@
     },
     methods: {
       router(path) {
-        if(this.$route.path == path) return
+        if(this.$route.path === path) return
         this.$router.replace(path)
       },
       create() {
@@ -84,7 +83,7 @@
         }
         else {
           alert('请先登录')
-          if(this.$route.path != '/login')
+          if(this.$route.path !== '/login')
           this.$router.push('/login')
         }
       },
@@ -106,9 +105,9 @@
       // 计算头像src
       avatarSrc() {
         if(this.$store.state.user.avatar) {
-          return baseURL + '/uploads/face/' + this.$store.state.user.avatar
+          return ORIGIN + '/uploads/face/' + this.$store.state.user.avatar
         }
-        else return baseURL + '/public/img/default/avatar-default.png'
+        else return ORIGIN + '/public/img/default/avatar-default.png'
       }
     },
   }
@@ -164,7 +163,7 @@
       display: none;
     }
   }
-  
+
   .logo{
     background-color: #444444;
     box-sizing: border-box;
@@ -177,7 +176,7 @@
       text-decoration: underline;
     }
   }
-  
+
   // 移动端
   @media (max-width: $action-width) {
     .panel{

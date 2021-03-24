@@ -2,9 +2,9 @@
   <div id="app">
     <index-header/>
     <main>
-      <keep-alive include="topics-panel">
+<!--      <keep-alive include="topics-panel">-->
         <router-view class='main-left'></router-view>
-      </keep-alive>
+<!--      </keep-alive>-->
       <index-aside class="main-right"/>
     </main>
     <index-footer/>
@@ -16,10 +16,7 @@
   import IndexHeader from '@views/indexHeader/IndexHeader.vue'
   import IndexAside from '@views/indexAside/IndexAside.vue'
   import IndexFooter from '@views/indexFooter/IndexFooter.vue'
-  
-  // 每次刷新页面，都向服务器请求登录
-  import {getUser} from '@network/login.js'
-  
+
   export default {
     name: 'app',
     components: {
@@ -29,7 +26,8 @@
     },
     mounted() {
       // 获取登录信息
-      getUser.call(this)
+      // 每次刷新页面，都向服务器请求登录
+      this.$axios.login.getUser.call(this)
     }
   }
 </script>
@@ -37,7 +35,7 @@
 <style lang="scss">
   /* 此处一定要加上~，在dom中使用也要加~ */
 	@import url("~@assets/css/normalize.css");
-  
+
   // pc端
   @media (min-width: $action-width) {
     main{
@@ -51,7 +49,7 @@
       margin-right: 15px;
     }
   }
-  
+
   // 移动端
   @media (max-width: $action-width) {
     main {
@@ -59,5 +57,5 @@
       margin: 10px auto;
     }
   }
-  
+
 </style>

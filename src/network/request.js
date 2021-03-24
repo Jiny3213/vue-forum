@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// const baseURL = 'http://101.132.237.93'
-const baseURL = 'http://localhost:8888'
+// const baseURL = 'http://jinyuu.cn/api/vf'
+const baseURL = 'http://localhost:3000/api/vf'
 
 export {baseURL}
 export function request(config) {
@@ -10,7 +10,7 @@ export function request(config) {
     baseURL,
     timeout: 5000,
     // 带上cookies
-    withCredentials: true
+    withCredentials: true // 带cookies必须要cors跨域
   })
   // 请求拦截,在headers上加上token
   instance.interceptors.request.use(config => {
@@ -23,7 +23,7 @@ export function request(config) {
     console.log(err)
     console.log('请求失败')
   })
-  
+
   // 响应拦截
   instance.interceptors.response.use(res => {
     if(res.data.msg) {
@@ -38,7 +38,7 @@ export function request(config) {
     console.log(err)
     console.log('响应失败')
   })
-  
+
   // 发送网络请求,返回一个promise
   return instance(config)
 }

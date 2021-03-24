@@ -19,7 +19,7 @@ const ProfileMod = () => import('@views/profile/ProfileMod.vue')
 const SearchPanel = () => import('@views/search/SearchPanel.vue')
 const NotFound = () => import('@views/notFound/NotFound.vue')
 
-// 安装插件
+// // 安装插件
 Vue.use(VueRouter)
 
 // 引入vuex，检查是否登录
@@ -34,7 +34,7 @@ var routes = [
       title: '社区首页'
     }
   },
-  { 
+  {
     path: '/login',
     name: 'login',
     component: Login,
@@ -139,11 +139,11 @@ const router = new VueRouter({
   mode: 'history'
 })
 
-// 设置顶端标题
-router.beforeEach((to, from, next) => {
-  document.title = to.meta.title
-  next()
-})
+// // 设置顶端标题
+// router.beforeEach((to, from, next) => {
+//   document.title = to.meta.title
+//   next()
+// })
 
 // 导出
 export default router

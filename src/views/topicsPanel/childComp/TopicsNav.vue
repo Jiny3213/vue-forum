@@ -27,7 +27,7 @@
     },
     methods: {
       clickNav(index, item) {
-        if(this.currentTag == item) return
+        if(this.currentTag === item) return
         // 改变样式
         this.isActive = index
         this.currentTag = item

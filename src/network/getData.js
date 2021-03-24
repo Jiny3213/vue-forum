@@ -4,7 +4,7 @@ import {request} from './request.js'
 // 根据id和tag显示文章列表
 function getTopics(page, tag) {
   return request({
-    url: '/api/topics',
+    url: '/topics',
     params: {
       page,
       tag
@@ -15,7 +15,7 @@ function getTopics(page, tag) {
 // 根据id获取文章
 function getTopic(topic_id) {
   return request({
-    url: '/api/topic',
+    url: '/topic',
     params: {
       topic_id
     }
@@ -24,7 +24,7 @@ function getTopic(topic_id) {
 
 function searchTopics(str, page=1) {
   return request({
-    url: '/api/search',
+    url: '/search',
     params: {
       str: str,
       page: page
@@ -32,4 +32,10 @@ function searchTopics(str, page=1) {
   })
 }
 
-export {getTopics, getTopic, searchTopics}
+function getBanner() {
+  return request({
+    url: '/banner'
+  })
+}
+
+export default {getTopics, getTopic, searchTopics, getBanner}
